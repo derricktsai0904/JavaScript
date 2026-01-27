@@ -2,23 +2,23 @@
 <h2> 連結至以下網址 </h2> <br>
 https://teachablemachine.withgoogle.com/
 
-<img src="01.jpg" width=600 height=400 /><br>
+<img src="01.jpg" width=300 height=200 /><br>
 
-<img src="02.jpg" width=600 height=400 /><br>
+<img src="02.jpg width=300 height=200 /><br>
 
-<img src="03.jpg" width=600 height=400 /><br>
+<img src="03.jpg" width=300 height=200 /><br>
 
-<img src="04.jpg" width=600 height=400 /><br>
+<img src="04.jpg" width=300 height=200 /><br>
 
-<img src="05.jpg" width=600 height=400 /><br>
+<img src="05.jpg" width=300 height=200 /><br>
 
-<img src="06.jpg" width=600 height=400 /><br>
+<img src="06.jpg" width=300 height=200 /><br>
 
-<img src="07.jpg" width=600 height=400 /><br>
+<img src="07.jpg" width=300 height=200 /><br>
 
-<img src="08.jpg" width=600 height=400 /><br>
+<img src="08.jpg" width=300 height=200 /><br>
 
-<img src="09.jpg" width=600 height=400 /><br>
+<img src="09.jpg" width=300 height=200 /><br>
 
 
 
