@@ -7,3 +7,6 @@ JavaScript 語法紀錄
 <Head>
    <script type="text/javascript" src="js/main.js"></script>
 </Head>
+
+bingo 遊戲連結 <br>
+https://derricktsai0904.github.io/JavaScript/bingo.html
