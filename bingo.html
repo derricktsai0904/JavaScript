@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>1~36 不重複隨機數字語音播放</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 10px;
+        }
+        #current {
+            font-size: 400px;
+            margin: 10px;
+            color: #1a73e8;
+        }
+        button {
+            font-size: 10px;
+            padding: 5px 10px;
+            margin: 5px;
+        }
+        #history {
+            margin-top: 10px;
+            font-size: 24px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+<table border=0 style="width:100%">
+<tr><td align=right>賓果遊戲 1～36 
+<button onclick="start()">▶ 開始</button>
+<button onclick="stop()">⏸ 停止</button>
+<button onclick="resetAll()">🔄 重新開始</button>
+</td></tr></table>
+
+<div id="current">-</div>
+<div id="history">
+    <hr>
+    <span id="historyList"></span>
+</div>
+
+<script>
+    let timer = null;
+    let numbers = [];
+    let history = [];
+
+    function initNumbers() {
+        numbers = [];
+        for (let i = 1; i <= 36; i++) {
+            numbers.push(i);
+        }
+    }
+
+    initNumbers();
+
+    function start() {
+        if (timer !== null) return;
+
+        drawNumber();
+        timer = setInterval(drawNumber, 6000);
+    }
+
+    function stop() {
+        clearInterval(timer);
+        timer = null;
+    }
+
+    function resetAll() {
+        stop();
+        history = [];
+        initNumbers();
+        document.getElementById("current").innerText = "-";
+        document.getElementById("historyList").innerText = "";
+    }
+
+    function drawNumber() {
+        if (numbers.length === 0) {
+            stop();
+            speakText("所有數字已抽完");
+            alert("1～36 已全部抽完！");
+            return;
+        }
+
+        // 從剩餘數字中隨機取一個
+        const index = Math.floor(Math.random() * numbers.length);
+        const num = numbers.splice(index, 1)[0];
+
+        // 顯示
+        document.getElementById("current").innerText = num;
+
+        // 累積紀錄
+        history.push(num);
+        document.getElementById("historyList").innerText = history.join(" , ");
+
+        // 語音播放
+        speakText(num.toString());
+    }
+
+    function speakText(text) {
+        const utterance = new SpeechSynthesisUtterance(text + "號");
+        utterance.lang = "zh-TW";
+        utterance.rate = 1.1;
+        utterance.pitch = 1.5;
+
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+        window.speechSynthesis.speak(utterance);
+        window.speechSynthesis.speak(utterance);
+    }
+</script>
+
+</body>
+</html>
