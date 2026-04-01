@@ -9,4 +9,7 @@ JavaScript 語法紀錄
 </Head>
 
 bingo 遊戲連結 <br>
-https://derricktsai0904.github.io/JavaScript/bingo.html
+https://derricktsai0904.github.io/JavaScript/bingo.html <br><br>
+
+Teachable Machine 範例網頁 <br>
+https://derricktsai0904.github.io/JavaScript/play.html
