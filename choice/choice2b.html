@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>同步語音抽人系統</title>
+
+<style>
+body{
+    font-family: Arial;
+    text-align:center;
+    background:#eef2f7;
+}
+
+h1{
+    margin-top:40px;
+}
+
+#nameBox{
+    margin:50px auto;
+    width:420px;
+    height:130px;
+    line-height:130px;
+    font-size:48px;
+    background:white;
+    border-radius:10px;
+    box-shadow:0 0 15px rgba(0,0,0,0.2);
+}
+
+button{
+    padding:15px 40px;
+    font-size:20px;
+    border:none;
+    border-radius:8px;
+    background:#007BFF;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#0056b3;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🎲 隨機抽籤系統-僑生專班 2B</h1>
+
+<div id="nameBox">準備抽籤</div>
+
+<button onclick="startCountdown()">開始抽籤</button>
+
+<script>
+
+let names = [
+"潘金潤",
+"劉勇耀",
+"黃德輝",
+"王豐盈",
+"莊順光",
+"黃金寶",
+"謝光榮",
+"黃達通",
+"廖世祥",
+"楊發興",
+"李世如意",
+"盧美堅",
+"凌日福",
+"黃世威",
+"吳富鳳",
+"唐玉燕",
+"黃玉明",
+"羅賢勇",
+"張玲丹",
+"林俊哥",
+"許俊偉",
+"温俊華",
+"楊貴創",
+"王廷生",
+"周展生",
+"李德華",
+"紀勇吉",
+"曾偉德",
+"朱清水",
+"陳惠姿"
+
+];
+
+
+// 語音播放並在結束後執行 callback
+function speak(text, callback){
+
+    let speech = new SpeechSynthesisUtterance(text);
+    speech.lang = "zh-TW";
+    speech.rate = 1;
+    speech.pitch = 1;
+
+    speech.onend = function(){
+        if(callback) callback();
+    }
+
+    window.speechSynthesis.speak(speech);
+}
+
+
+// 倒數同步播放
+function startCountdown(){
+
+    let box = document.getElementById("nameBox");
+
+    let numbers = ["3","2","1"];
+
+    function next(i){
+
+        if(i < numbers.length){
+
+            box.innerHTML = numbers[i];
+
+            speak(numbers[i], function(){
+                next(i+1);
+            });
+
+        }else{
+
+            box.innerHTML = "開始抽";
+            speak("開始抽", function(){
+                startPick();
+            });
+
+        }
+    }
+
+    next(0);
+}
+
+
+// 抽人動畫
+function startPick(){
+
+    let box = document.getElementById("nameBox");
+
+    let count = 0;
+
+    let timer = setInterval(function(){
+
+        let index = Math.floor(Math.random()*names.length);
+
+        box.innerHTML = names[index];
+
+        count++;
+
+        if(count > 60){
+
+            clearInterval(timer);
+
+            let finalIndex = Math.floor(Math.random()*names.length);
+            let winner = names[finalIndex];
+
+            box.innerHTML = "🎉 " + winner;
+
+            speak("恭喜 " + winner);
+        }
+
+    },50);
+
+}
+
+</script>
+
+</body>
+</html>
