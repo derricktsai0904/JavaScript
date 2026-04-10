@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>河內塔 AI 解題顯示</title>
+<style>
+body { font-family: Arial; text-align: center; background: #f4f4f4; }
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.tower {
+    width: 150px;
+    height: 300px;
+    border: 2px solid #333;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    background: white;
+}
+
+.disk {
+    height: 20px;
+    margin: 3px;
+    border-radius: 5px;
+    color: white;
+}
+
+.highlight {
+    border: 3px solid red;
+}
+
+#log {
+    width: 60%;
+    height: 150px;
+    margin: 20px auto;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #ccc;
+    text-align: left;
+    padding: 10px;
+}
+
+button { margin: 5px; padding: 8px 15px; }
+</style>
+</head>
+<body>
+
+<h1>河內塔 AI 解題顯示</h1>
+
+<label>圓盤數量：</label>
+<input type="number" id="diskCount" value="3" min="2" max="8">
+
+<button onclick="init()">開始</button>
+<button onclick="startAI()">AI 自動解</button>
+<button onclick="stepAI()">下一步</button>
+
+<p>步數：<span id="moves">0</span> / 最佳：<span id="optimal">0</span></p>
+
+<div class="container">
+    <div class="tower" id="A"></div>
+    <div class="tower" id="B"></div>
+    <div class="tower" id="C"></div>
+</div>
+
+<h3>AI 解題步驟</h3>
+<div id="log"></div>
+
+<script>
+let towers, movesList, stepIndex;
+let totalDisks = 3;
+let moveCount = 0;
+let timer = null;
+
+function init() {
+    totalDisks = parseInt(document.getElementById("diskCount").value);
+    towers = { A: [], B: [], C: [] };
+    movesList = [];
+    stepIndex = 0;
+    moveCount = 0;
+
+    for (let i = totalDisks; i >= 1; i--) {
+        towers.A.push(i);
+    }
+
+    document.getElementById("moves").innerText = 0;
+    document.getElementById("optimal").innerText = Math.pow(2, totalDisks) - 1;
+    document.getElementById("log").innerHTML = "";
+
+    render();
+}
+
+// 渲染畫面
+function render() {
+    ["A","B","C"].forEach(t => {
+        const el = document.getElementById(t);
+        el.innerHTML = "";
+        towers[t].forEach(d => {
+            let div = document.createElement("div");
+            div.className = "disk";
+            div.style.width = (d * 20) + "px";
+            div.style.background = `hsl(${d*40},70%,50%)`;
+            el.appendChild(div);
+        });
+    });
+}
+
+// AI 計算
+function generateMoves() {
+    movesList = [];
+    hanoi(totalDisks, "A", "C", "B");
+}
+
+// 遞迴
+function hanoi(n, from, to, aux) {
+    if (n === 1) {
+        movesList.push([from, to]);
+        return;
+    }
+    hanoi(n-1, from, aux, to);
+    movesList.push([from, to]);
+    hanoi(n-1, aux, to, from);
+}
+
+// 執行一步
+function stepAI() {
+    if (stepIndex >= movesList.length) return;
+
+    let [from, to] = movesList[stepIndex];
+
+    towers[to].push(towers[from].pop());
+    moveCount++;
+    stepIndex++;
+
+    document.getElementById("moves").innerText = moveCount;
+
+    logStep(from, to, stepIndex);
+
+    highlight(from, to);
+
+    render();
+}
+
+// 自動播放
+function startAI() {
+    generateMoves();
+
+    if (timer) clearInterval(timer);
+
+    timer = setInterval(() => {
+        if (stepIndex >= movesList.length) {
+            clearInterval(timer);
+            return;
+        }
+        stepAI();
+    }, 600);
+}
+
+// 步驟紀錄
+function logStep(from, to, step) {
+    let log = document.getElementById("log");
+    log.innerHTML += `第 ${step} 步：${from} → ${to}<br>`;
+    log.scrollTop = log.scrollHeight;
+}
+
+// 高亮
+function highlight(from, to) {
+    ["A","B","C"].forEach(t => {
+        document.getElementById(t).classList.remove("highlight");
+    });
+    document.getElementById(from).classList.add("highlight");
+    document.getElementById(to).classList.add("highlight");
+}
+
+init();
+</script>
+
+</body>
+</html>
