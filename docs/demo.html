@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Lrikulau Character Showcase</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Noto Sans TC",sans-serif;
+    background:#f6f1eb;
+    color:#4b3d32;
+    overflow-x:hidden;
+}
+
+/* =========================
+   Header
+========================= */
+
+header{
+    width:100%;
+    padding:40px 5%;
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:100;
+}
+
+.logo{
+    font-size:2rem;
+    letter-spacing:6px;
+    font-weight:bold;
+    color:#8a6a50;
+}
+
+/* =========================
+   Hero Section
+========================= */
+
+.character-slider-section{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    padding:120px 5% 80px;
+    background:
+    linear-gradient(
+        135deg,
+        #f7f2eb 0%,
+        #efe6dc 100%
+    );
+}
+
+.slider-container{
+    width:100%;
+    max-width:1400px;
+    margin:auto;
+
+    display:grid;
+    grid-template-columns:420px 1fr;
+    gap:60px;
+    align-items:center;
+}
+
+/* =========================
+   Character Info
+========================= */
+
+.character-info{
+    animation:fadeUp 1s ease;
+}
+
+.tag{
+    display:inline-block;
+    padding:8px 18px;
+    border-radius:999px;
+    background:#7d9d9b;
+    color:white;
+    font-size:0.9rem;
+    margin-bottom:20px;
+}
+
+.character-info h1{
+    font-size:4rem;
+    line-height:1.1;
+    margin-bottom:25px;
+    color:#5a4737;
+}
+
+.description{
+    line-height:2;
+    color:#6f655d;
+    margin-bottom:30px;
+}
+
+.info-box{
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    margin-bottom:20px;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,0.08);
+}
+
+.info-box h3{
+    margin-bottom:10px;
+    color:#7a5d48;
+}
+
+/* =========================
+   Slider
+========================= */
+
+.slider-wrapper{
+    position:relative;
+    animation:fadeIn 1.2s ease;
+}
+
+.slider{
+    width:100%;
+    height:760px;
+
+    position:relative;
+    overflow:hidden;
+
+    border-radius:30px;
+
+    box-shadow:
+    0 20px 40px rgba(0,0,0,0.15);
+}
+
+.slide{
+    position:absolute;
+    width:100%;
+    height:100%;
+
+    opacity:0;
+    transition:1s ease;
+}
+
+.slide.active{
+    opacity:1;
+    z-index:1;
+}
+
+.slide img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* =========================
+   Navigation
+========================= */
+
+.nav{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+
+    width:58px;
+    height:58px;
+
+    border:none;
+    border-radius:50%;
+
+    cursor:pointer;
+
+    font-size:1.5rem;
+
+    background:rgba(255,255,255,0.8);
+    backdrop-filter:blur(6px);
+
+    transition:0.3s;
+    z-index:20;
+}
+
+.nav:hover{
+    background:white;
+    transform:
+    translateY(-50%)
+    scale(1.08);
+}
+
+.prev{
+    left:20px;
+}
+
+.next{
+    right:20px;
+}
+
+/* =========================
+   Dots
+========================= */
+
+.dots{
+    position:absolute;
+
+    bottom:25px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    display:flex;
+    gap:12px;
+
+    z-index:20;
+}
+
+.dot{
+    width:14px;
+    height:14px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,0.5);
+
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.dot.active{
+    background:white;
+    transform:scale(1.25);
+}
+
+/* =========================
+   Gallery
+========================= */
+
+.gallery{
+    padding:100px 5%;
+}
+
+.section-title{
+    text-align:center;
+    font-size:3rem;
+    margin-bottom:60px;
+    color:#6a5140;
+}
+
+.gallery-grid{
+    max-width:1300px;
+    margin:auto;
+
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(300px,1fr));
+
+    gap:30px;
+}
+
+.card{
+    background:white;
+    border-radius:24px;
+    overflow:hidden;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,0.08);
+
+    transition:0.4s;
+}
+
+.card:hover{
+    transform:
+    translateY(-10px);
+}
+
+.card img{
+    width:100%;
+    height:300px;
+    object-fit:cover;
+}
+
+.card-content{
+    padding:25px;
+}
+
+.card-content h3{
+    margin-bottom:12px;
+    color:#6a5140;
+}
+
+/* =========================
+   Footer
+========================= */
+
+footer{
+    padding:40px;
+    text-align:center;
+
+    background:#8a6a50;
+    color:white;
+}
+
+/* =========================
+   Animation
+========================= */
+
+@keyframes fadeUp{
+
+    from{
+        opacity:0;
+        transform:translateY(40px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+    }
+
+    to{
+        opacity:1;
+    }
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media(max-width:980px){
+
+    .slider-container{
+        grid-template-columns:1fr;
+    }
+
+    .character-info h1{
+        font-size:3rem;
+    }
+
+    .slider{
+        height:520px;
+    }
+}
+
+@media(max-width:640px){
+
+    .character-info h1{
+        font-size:2.3rem;
+    }
+
+    .slider{
+        height:420px;
+    }
+
+    .section-title{
+        font-size:2.2rem;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     Header
+========================= -->
+
+<header>
+    <div class="logo">
+        LRIKULAU
+    </div>
+</header>
+
+<!-- =========================
+     Hero
+========================= -->
+
+<section class="character-slider-section">
+
+    <div class="slider-container">
+
+        <!-- Left Info -->
+
+        <div class="character-info">
+
+            <span class="tag">
+                Original Character
+            </span>
+
+            <h1>
+                Lrikulau
+            </h1>
+
+            <p class="description">
+                冷淡卻擁有溫柔內心的森林守護者，
+                以淡藍披風與獸耳作為主要特徵，
+                整體設計融合奇幻與童話風格，
+                並帶有柔和療癒感。
+            </p>
+
+            <div class="info-box">
+                <h3>角色特徵</h3>
+
+                <p>
+                    雲紋毛色、長尾巴、寬大披風、
+                    森林系配色與溫柔風格設計。
+                </p>
+            </div>
+
+            <div class="info-box">
+                <h3>世界觀設定</h3>
+
+                <p>
+                    居住於霧之森林深處，
+                    負責守護被遺忘的古老聚落。
+                </p>
+            </div>
+
+            <div class="info-box">
+                <h3>角色定位</h3>
+
+                <p>
+                    治癒系角色 IP，
+                    可延伸至動畫、遊戲與文創商品。
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Right Slider -->
+
+        <div class="slider-wrapper">
+
+            <div class="slider">
+
+                <div class="slide active">
+                    <img src="images/character-main1.jpg" alt="">
+                </div>
+
+                <div class="slide">
+                    <img src="images/character-main2.jpg" alt="">
+                </div>
+
+                <div class="slide">
+                    <img src="images/goods.jpg" alt="">
+                </div>
+
+            </div>
+
+            <!-- Nav -->
+
+            <button class="nav prev" onclick="changeSlide(-1)">
+                ❮
+            </button>
+
+            <button class="nav next" onclick="changeSlide(1)">
+                ❯
+            </button>
+
+            <!-- Dots -->
+
+            <div class="dots">
+
+                <span class="dot active"
+                onclick="currentSlide(0)">
+                </span>
+
+                <span class="dot"
+                onclick="currentSlide(1)">
+                </span>
+
+                <span class="dot"
+                onclick="currentSlide(2)">
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================
+     Gallery
+========================= -->
+
+<section class="gallery">
+
+    <h2 class="section-title">
+        Character Goods
+    </h2>
+
+    <div class="gallery-grid">
+
+        <div class="card">
+
+            <img src="images/goods1.jpg" alt="">
+
+            <div class="card-content">
+
+                <h3>角色周邊設計</h3>
+
+                <p>
+                    馬克杯設計。
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <img src="images/goods2.jpg" alt="">
+
+            <div class="card-content">
+
+                <h3>角色周邊設計</h3>
+
+                <p>
+                    立牌設計。
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <img src="images/goods3.jpg" alt="">
+
+            <div class="card-content">
+
+                <h3>角色周邊設計</h3>
+
+                <p>
+                    帆布袋設計。
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <img src="images/goods4.jpg" alt="">
+
+            <div class="card-content">
+
+                <h3>角色周邊設計</h3>
+
+                <p>
+                    手機殼設計。
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================
+     Footer
+========================= -->
+
+<footer>
+    © 2026 Lrikulau Character Showcase
+</footer>
+
+<!-- =========================
+     JavaScript
+========================= -->
+
+<script>
+
+let current = 0;
+
+const slides =
+document.querySelectorAll(".slide");
+
+const dots =
+document.querySelectorAll(".dot");
+
+/* 顯示圖片 */
+
+function showSlide(index){
+
+    slides.forEach(slide=>{
+        slide.classList.remove("active");
+    });
+
+    dots.forEach(dot=>{
+        dot.classList.remove("active");
+    });
+
+    slides[index].classList.add("active");
+    dots[index].classList.add("active");
+}
+
+/* 左右切換 */
+
+function changeSlide(step){
+
+    current += step;
+
+    if(current >= slides.length){
+        current = 0;
+    }
+
+    if(current < 0){
+        current = slides.length - 1;
+    }
+
+    showSlide(current);
+}
+
+/* 點擊圓點 */
+
+function currentSlide(index){
+
+    current = index;
+    showSlide(current);
+}
+
+/* 自動輪播 */
+
+setInterval(()=>{
+
+    changeSlide(1);
+
+}, 4500);
+
+</script>
+
+</body>
+</html>
