@@ -5,8 +5,8 @@
 | <img src="A.jpg" width=200 height=200 /><br> | <img src="B.jpg" width=200 height=200 /><br> | <img src="C.jpg" width=200 height=200 /><br>| <br><br><br>|
 
 ### 以 Teachable Machine 網站先訓練好此模型。(https://teachablemachine.withgoogle.com/)
-### 產生如下模型網址
-### https://teachablemachine.withgoogle.com/models/h0J6ufW2H/
+產生如下模型網址 <br>
+https://teachablemachine.withgoogle.com/models/h0J6ufW2H/
 
 遊戲試玩連結
 https://derricktsai0904.github.io/JavaScript/TeachAble/Sample/fruit/fruit.html
