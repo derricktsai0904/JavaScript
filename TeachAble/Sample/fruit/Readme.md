@@ -1,16 +1,8 @@
 ## 切水果遊戲
 
-### 以手勢A 為開始遊戲 <br>
-<img src="A.jpg" width=200 height=200 /><br><br><br>
-
-### 以手勢B 為暫停遊戲 <br>
-<img src="B.jpg" width=200 height=200 /><br><br><br>
-
-### 以手勢C 為暫停遊戲 <br>
-<img src="C.jpg" width=200 height=200 /><br><br><br>
-
-### 沒有手勢代表沒有動作 <br><br><br>
-
+|手勢A 為開始遊戲|手勢B 為暫停遊戲|手勢C 為暫停遊戲|沒有手勢代表沒有動作|
+|---|---|---|---|
+| <img src="A.jpg" width=200 height=200 /><br> | <img src="B.jpg" width=200 height=200 /><br> | <img src="C.jpg" width=200 height=200 /><br>| <br><br><br>|
 
 ### 以 Teachable Machine 網站先訓練好此模型。(https://teachablemachine.withgoogle.com/)
 ### 產生如下模型網址
