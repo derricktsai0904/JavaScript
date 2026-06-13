@@ -11,7 +11,7 @@
 ### https://teachablemachine.withgoogle.com/models/h0J6ufW2H/
 
 遊戲試玩連結
-https://derricktsai0904.github.io/JavaScript/TeachAble/fruit/fruit.html
+https://derricktsai0904.github.io/JavaScript/TeachAble/Sample/fruit/fruit.html
 
 ## 並且撰寫以下程式
 
