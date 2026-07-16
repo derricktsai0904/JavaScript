@@ -1,6 +1,6 @@
 ## 切水果遊戲
 
-|手勢A 為開始遊戲|手勢B 為暫停遊戲|手勢C 為暫停遊戲|沒有手勢代表沒有動作|
+|手勢A 為開始遊戲|手勢B 為切水果|手勢C 為暫停遊戲|沒有手勢代表沒有動作|
 |---|---|---|---|
 | <img src="A.jpg" width=200 height=200 /><br> | <img src="B.jpg" width=200 height=200 /><br> | <img src="C.jpg" width=200 height=200 /><br>| <br><br><br>|
 
