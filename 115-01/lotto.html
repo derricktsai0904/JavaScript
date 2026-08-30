@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>語音連續隨機抽籤系統</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    font-family: "Microsoft JhengHei", Arial, sans-serif;
+    background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.15);
+}
+
+h1 {
+    text-align: center;
+    margin-top: 0;
+    color: #1565c0;
+    font-size: 38px;
+}
+
+.description {
+    text-align: center;
+    color: #666;
+    font-size: 17px;
+    margin-bottom: 25px;
+}
+
+.main {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr 1fr;
+    gap: 20px;
+}
+
+.panel {
+    background: #f8fafc;
+    border-radius: 15px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+}
+
+.panel h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+textarea {
+    width: 100%;
+    height: 420px;
+    resize: vertical;
+    border: 2px solid #d0d7de;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 18px;
+    line-height: 1.8;
+    outline: none;
+    background: white;
+}
+
+textarea:focus {
+    border-color: #1976d2;
+}
+
+.count-box {
+    margin-top: 12px;
+    padding: 10px;
+    background: #e3f2fd;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 17px;
+}
+
+.count-number {
+    color: #d32f2f;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+
+/* ==========================
+   設定區
+========================== */
+
+.setting-box {
+    background: white;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+}
+
+.setting-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+select {
+    width: 100%;
+    padding: 12px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: 2px solid #1976d2;
+    background: white;
+}
+
+.voice-option {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 17px;
+}
+
+.voice-option input {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* ==========================
+   抽籤結果
+========================== */
+
+.result-area {
+    min-height: 240px;
+    background: linear-gradient(135deg, #1565c0, #42a5f5);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.result-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+#result {
+    font-size: 50px;
+    font-weight: bold;
+    min-height: 65px;
+    word-break: break-all;
+    text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+#drawProgress {
+    margin-top: 18px;
+    font-size: 18px;
+    color: #e3f2fd;
+}
+
+
+/* ==========================
+   按鈕
+========================== */
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+button {
+    border: none;
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-family: "Microsoft JhengHei", Arial, sans-serif;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    transform: none;
+}
+
+#drawBtn {
+    flex: 1;
+    background: #e53935;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+#clearBtn {
+    background: #757575;
+    color: white;
+}
+
+#clearWinnerBtn {
+    background: #00897b;
+    color: white;
+}
+
+#testVoiceBtn {
+    width: 100%;
+    margin-top: 10px;
+    background: #7b1fa2;
+    color: white;
+}
+
+
+/* ==========================
+   已抽中清單
+========================== */
+
+.winner-box {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    height: 420px;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+#winnerList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#winnerList li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #fff8e1, #fffde7);
+    border-left: 5px solid #ff9800;
+    border-radius: 8px;
+    font-size: 19px;
+    animation: winnerIn 0.4s ease;
+}
+
+.winner-number {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 34px;
+    height: 34px;
+    background: #ff9800;
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+}
+
+.winner-name {
+    font-weight: bold;
+}
+
+@keyframes winnerIn {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.drawing {
+    animation: pulse 0.12s infinite alternate;
+}
+
+@keyframes pulse {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.1);
+    }
+}
+
+.current-winner {
+    animation: winnerFlash 0.5s ease;
+}
+
+@keyframes winnerFlash {
+    0% {
+        transform: scale(0.7);
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
+/* ==========================
+   手機版
+========================== */
+
+@media(max-width: 900px) {
+
+    .main {
+        grid-template-columns: 1fr;
+    }
+
+    textarea,
+    .winner-box {
+        height: 300px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>連續隨機抽籤系統</h2>
+
+
+<div class="main">
+
+
+<!-- 左側 -->
+<div class="panel">
+
+<h2>📋 待抽名單</h2>
+
+<textarea
+    id="nameList"
+    placeholder="請輸入名單，每行一個姓名，例如：
+
+王小明
+李小華
+陳大文
+林志明
+張美玲
+黃志強
+蔡美惠
+吳建宏
+劉怡君
+陳志豪"></textarea>
+
+<div class="count-box">
+
+剩餘可抽：
+
+<span class="count-number" id="remainCount">
+0
+</span>
+
+人
+
+</div>
+
+</div>
+
+
+<!-- 中間 -->
+<div class="panel">
+
+<h2>🎲 抽籤設定</h2>
+
+
+<div class="setting-box">
+
+<div class="setting-title">
+本次要抽出幾人？
+</div>
+
+<select id="drawCount">
+
+<option value="1">1 人</option>
+<option value="2">2 人</option>
+<option value="3">3 人</option>
+<option value="4">4 人</option>
+<option value="5">5 人</option>
+<option value="6">6 人</option>
+<option value="7">7 人</option>
+<option value="8">8 人</option>
+<option value="9">9 人</option>
+<option value="10">10 人</option>
+
+</select>
+
+
+<div class="voice-option">
+
+<input
+    type="checkbox"
+    id="enableVoice"
+    checked>
+
+<label for="enableVoice">
+🔊 抽中後自動讀出姓名
+</label>
+
+</div>
+
+
+<button
+    type="button"
+    id="testVoiceBtn">
+
+🔊 測試語音
+
+</button>
+
+</div>
+
+
+<div class="result-area">
+
+<div class="result-title">
+本次抽籤結果
+</div>
+
+<div id="result">
+等待抽籤
+</div>
+
+<div id="drawProgress">
+請按下開始抽籤
+</div>
+
+</div>
+
+
+<div class="buttons">
+
+<button
+    type="button"
+    id="drawBtn">
+
+🎲 開始抽籤
+
+</button>
+
+<button
+    type="button"
+    id="clearBtn">
+
+全部重設
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- 右側 -->
+<div class="panel">
+
+<h2>🏆 已抽中清單</h2>
+
+<div class="winner-box">
+
+<ul id="winnerList"></ul>
+
+</div>
+
+
+<div class="count-box">
+
+累計已抽：
+
+<span
+    class="count-number"
+    id="winnerCount">
+
+0
+
+</span>
+
+人
+
+</div>
+
+
+<div class="buttons">
+
+<button
+    type="button"
+    id="clearWinnerBtn">
+
+清除抽中紀錄
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+// ==========================================
+// 全域變數
+// ==========================================
+
+let drawing = false;
+
+let winners = [];
+
+let chineseVoice = null;
+
+
+// ==========================================
+// DOM
+// ==========================================
+
+const nameList =
+    document.getElementById("nameList");
+
+const result =
+    document.getElementById("result");
+
+const remainCount =
+    document.getElementById("remainCount");
+
+const winnerCount =
+    document.getElementById("winnerCount");
+
+const drawBtn =
+    document.getElementById("drawBtn");
+
+const drawProgress =
+    document.getElementById("drawProgress");
+
+const drawCount =
+    document.getElementById("drawCount");
+
+const enableVoice =
+    document.getElementById("enableVoice");
+
+
+// ==========================================
+// 載入中文語音
+// ==========================================
+
+function loadVoices() {
+
+    if (!("speechSynthesis" in window)) {
+
+        return;
+
+    }
+
+    const voices =
+        window.speechSynthesis.getVoices();
+
+
+    // 優先尋找台灣中文
+
+    chineseVoice =
+        voices.find(
+
+            voice =>
+                voice.lang === "zh-TW"
+
+        );
+
+
+    // 找不到台灣中文，使用其他中文
+
+    if (!chineseVoice) {
+
+        chineseVoice =
+            voices.find(
+
+                voice =>
+                    voice.lang.startsWith("zh")
+
+            );
+
+    }
+
+}
+
+
+// Chrome 語音通常會延後載入
+
+if ("speechSynthesis" in window) {
+
+    loadVoices();
+
+    window.speechSynthesis.onvoiceschanged =
+        loadVoices;
+
+}
+
+
+// ==========================================
+// 語音播放
+// ==========================================
+
+function speak(text) {
+
+    return new Promise(resolve => {
+
+
+        if (!enableVoice.checked) {
+
+            resolve();
+
+            return;
+
+        }
+
+
+        if (!("speechSynthesis" in window)) {
+
+            resolve();
+
+            return;
+
+        }
+
+
+        // 停止上一段尚未完成的語音
+
+        window.speechSynthesis.cancel();
+
+
+        const utterance =
+            new SpeechSynthesisUtterance(text);
+
+
+        utterance.lang =
+            "zh-TW";
+
+
+        // 語速
+        // 1 = 正常
+        // 0.8 = 稍慢
+
+        utterance.rate =
+            0.85;
+
+
+        // 音調
+
+        utterance.pitch =
+            1;
+
+
+        // 音量
+
+        utterance.volume =
+            1;
+
+
+        if (chineseVoice) {
+
+            utterance.voice =
+                chineseVoice;
+
+        }
+
+
+        utterance.onend =
+            () => resolve();
+
+
+        utterance.onerror =
+            () => resolve();
+
+
+        window.speechSynthesis.speak(
+            utterance
+        );
+
+    });
+
+}
+
+
+// ==========================================
+// 取得待抽名單
+// ==========================================
+
+function getNames() {
+
+    return nameList.value
+
+        .split("\n")
+
+        .map(
+            name =>
+                name.trim()
+        )
+
+        .filter(
+            name =>
+                name !== ""
+        );
+
+}
+
+
+// ==========================================
+// 更新人數
+// ==========================================
+
+function updateCount() {
+
+    const names =
+        getNames();
+
+
+    remainCount.textContent =
+        names.length;
+
+
+    winnerCount.textContent =
+        winners.length;
+
+}
+
+
+nameList.addEventListener(
+    "input",
+    updateCount
+);
+
+
+// ==========================================
+// 開始抽籤
+// ==========================================
+
+async function startDraw() {
+
+    if (drawing) {
+
+        return;
+
+    }
+
+
+    let names =
+        getNames();
+
+
+    let wantCount =
+        parseInt(
+            drawCount.value,
+            10
+        );
+
+
+    if (names.length === 0) {
+
+        alert(
+            "目前沒有可以抽出的名單！"
+        );
+
+        return;
+
+    }
+
+
+    if (wantCount > names.length) {
+
+        alert(
+            "目前剩餘只有 " +
+            names.length +
+            " 人，系統將全部抽出。"
+        );
+
+        wantCount =
+            names.length;
+
+    }
+
+
+    drawing =
+        true;
+
+
+    drawBtn.disabled =
+        true;
+
+
+    drawCount.disabled =
+        true;
+
+
+    drawBtn.textContent =
+        "🎲 抽籤進行中...";
+
+
+
+    // ======================================
+    // 逐一連續抽籤
+    // ======================================
+
+    for (
+        let i = 0;
+        i < wantCount;
+        i++
+    ) {
+
+
+        drawProgress.textContent =
+
+            "正在抽第 " +
+            (i + 1) +
+            " / " +
+            wantCount +
+            " 人";
+
+
+        // 抽一位
+
+        const winner =
+            await drawOne(names);
+
+
+        // 加入已抽名單
+
+        winners.push(
+            winner
+        );
+
+
+        addWinner(
+            winner
+        );
+
+
+        // 從原始候選名單移除
+
+        const index =
+            names.indexOf(
+                winner
+            );
+
+
+        if (index !== -1) {
+
+            names.splice(
+                index,
+                1
+            );
+
+        }
+
+
+        nameList.value =
+            names.join("\n");
+
+
+        updateCount();
+
+
+        // ==================================
+        // 自動語音讀出姓名
+        // ==================================
+
+        drawProgress.textContent =
+
+            "🔊 抽中：" +
+            winner;
+
+
+        await speak(
+            "恭喜，" +
+            winner
+        );
+
+
+        // 下一位抽籤前稍微停一下
+
+        if (
+            i <
+            wantCount - 1
+        ) {
+
+            await sleep(
+                500
+            );
+
+        }
+
+    }
+
+
+    // ======================================
+    // 全部抽完
+    // ======================================
+
+    drawProgress.textContent =
+
+        "🎉 本次抽籤完成，共抽出 " +
+        wantCount +
+        " 人";
+
+
+    await speak(
+        "本次抽籤完成"
+    );
+
+
+    drawBtn.disabled =
+        false;
+
+
+    drawCount.disabled =
+        false;
+
+
+    drawBtn.textContent =
+        "🎲 繼續抽籤";
+
+
+    drawing =
+        false;
+
+}
+
+
+// ==========================================
+// 抽一人
+// ==========================================
+
+function drawOne(names) {
+
+    return new Promise(resolve => {
+
+
+        result.classList.remove(
+            "current-winner"
+        );
+
+
+        result.classList.add(
+            "drawing"
+        );
+
+
+        // 名字快速跳動
+
+        const timer =
+            setInterval(
+                () => {
+
+                    const randomIndex =
+                        Math.floor(
+                            Math.random() *
+                            names.length
+                        );
+
+
+                    result.textContent =
+                        names[
+                            randomIndex
+                        ];
+
+                },
+
+                70
+            );
+
+
+        // 1.5 秒後抽出
+
+        setTimeout(
+            () => {
+
+                clearInterval(
+                    timer
+                );
+
+
+                const randomIndex =
+                    Math.floor(
+                        Math.random() *
+                        names.length
+                    );
+
+
+                const winner =
+                    names[
+                        randomIndex
+                    ];
+
+
+                result.classList.remove(
+                    "drawing"
+                );
+
+
+                result.textContent =
+                    "🎉 " +
+                    winner;
+
+
+                result.classList.add(
+                    "current-winner"
+                );
+
+
+                resolve(
+                    winner
+                );
+
+            },
+
+            1500
+        );
+
+    });
+
+}
+
+
+// ==========================================
+// 加入右側已抽中名單
+// ==========================================
+
+function addWinner(name) {
+
+    const list =
+        document.getElementById(
+            "winnerList"
+        );
+
+
+    const li =
+        document.createElement(
+            "li"
+        );
+
+
+    const numberSpan =
+        document.createElement(
+            "span"
+        );
+
+
+    numberSpan.className =
+        "winner-number";
+
+
+    numberSpan.textContent =
+        winners.length;
+
+
+    const nameSpan =
+        document.createElement(
+            "span"
+        );
+
+
+    nameSpan.className =
+        "winner-name";
+
+
+    nameSpan.textContent =
+        name;
+
+
+    li.appendChild(
+        numberSpan
+    );
+
+
+    li.appendChild(
+        nameSpan
+    );
+
+
+    list.appendChild(
+        li
+    );
+
+
+    // 自動捲動至最下面
+
+    const winnerBox =
+        document.querySelector(
+            ".winner-box"
+        );
+
+
+    winnerBox.scrollTop =
+        winnerBox.scrollHeight;
+
+}
+
+
+// ==========================================
+// 測試語音
+// ==========================================
+
+document.getElementById(
+    "testVoiceBtn"
+).addEventListener(
+    "click",
+    async function() {
+
+        await speak(
+            "語音測試成功，抽籤系統準備完成"
+        );
+
+    }
+);
+
+
+// ==========================================
+// 開始抽籤按鈕
+// ==========================================
+
+drawBtn.addEventListener(
+    "click",
+    startDraw
+);
+
+
+// ==========================================
+// 清除已抽中紀錄
+// 不會把名單放回去
+// ==========================================
+
+document.getElementById(
+    "clearWinnerBtn"
+).addEventListener(
+    "click",
+    function() {
+
+        if (drawing) {
+
+            return;
+
+        }
+
+
+        winners = [];
+
+
+        document.getElementById(
+            "winnerList"
+        ).innerHTML =
+            "";
+
+
+        result.textContent =
+            "等待抽籤";
+
+
+        drawProgress.textContent =
+            "已清除抽中紀錄";
+
+
+        updateCount();
+
+    }
+);
+
+
+// ==========================================
+// 全部重設
+// ==========================================
+
+document.getElementById(
+    "clearBtn"
+).addEventListener(
+    "click",
+    function() {
+
+        if (drawing) {
+
+            return;
+
+        }
+
+
+        const ok =
+            confirm(
+                "確定要清除全部名單及抽籤紀錄嗎？"
+            );
+
+
+        if (!ok) {
+
+            return;
+
+        }
+
+
+        if (
+            "speechSynthesis" in window
+        ) {
+
+            window.speechSynthesis.cancel();
+
+        }
+
+
+        nameList.value =
+            "";
+
+
+        winners =
+            [];
+
+
+        document.getElementById(
+            "winnerList"
+        ).innerHTML =
+            "";
+
+
+        result.textContent =
+            "等待抽籤";
+
+
+        drawProgress.textContent =
+            "請按下開始抽籤";
+
+
+        updateCount();
+
+    }
+);
+
+
+// ==========================================
+// 延遲
+// ==========================================
+
+function sleep(ms) {
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                ms
+            )
+    );
+
+}
+
+
+// ==========================================
+// 初始化
+// ==========================================
+
+updateCount();
+
+</script>
+
+</body>
+</html>
+```
